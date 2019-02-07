@@ -16,22 +16,22 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-public class WordCountExample {
+public class LineCountExample {
     public static void main(String[] args) {
         try {
             Configuration cconf = new Configuration();
-            cconf.set("fs.defaultFS", "hdfs://localhost:8020");
-            cconf.set("mapreduce.framework.name", "yarn");
-            cconf.set("yarn.resourcemanager.address", "localhost:8032");
+            cconf.set("fs.defaultFS", "hdfs://127.0.0.1:8020");
+            cconf.set("mapreduce.framework.name", "local");
+            cconf.set("yarn.resourcemanager.address", "127.0.0.1:8032");
             //conf.set("mapreduce.job.running.map.limit", "3");
             //conf.set("mapreduce.job.maps", "3");
 
             // Create job
             Job job = Job.getInstance(cconf, "WordCountExample");
-            job.setJarByClass(WordCountExample.class);
+            job.setJarByClass(LineCountExample.class);
 
-            job.setMapperClass(WordCountExample.Map.class);
-            job.setReducerClass(WordCountExample.Reduce.class);
+            job.setMapperClass(LineCountExample.Map.class);
+            job.setReducerClass(LineCountExample.Reduce.class);
 
             job.setMapOutputKeyClass(Text.class);
             job.setMapOutputValueClass(IntWritable.class);
@@ -40,11 +40,11 @@ public class WordCountExample {
             job.setOutputValueClass(IntWritable.class);
 
             // Input
-            FileInputFormat.addInputPath(job, new Path("/mockdata/airports/airports.dat"));
+            FileInputFormat.addInputPath(job, new Path(args[0]));
             job.setInputFormatClass(TextInputFormat.class);
 
             // Output
-            FileOutputFormat.setOutputPath(job, new Path("/output/wordcount_example"));
+            FileOutputFormat.setOutputPath(job, new Path(args[1]));
             job.setOutputFormatClass(TextOutputFormat.class);
 
             // Execute job and return status
@@ -62,7 +62,7 @@ public class WordCountExample {
         private final Text word = new Text();
 
         @Override
-        public void map(Object key, Text value, Mapper.Context context)
+        public void map(Object key, Text value, Context context)
                 throws IOException, InterruptedException {
             String line = value.toString();
             StringTokenizer itr = new StringTokenizer(line, " ");
