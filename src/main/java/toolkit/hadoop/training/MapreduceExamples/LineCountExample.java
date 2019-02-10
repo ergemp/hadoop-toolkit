@@ -27,7 +27,7 @@ public class LineCountExample {
             //conf.set("mapreduce.job.maps", "3");
 
             // Create job
-            Job job = Job.getInstance(cconf, "WordCountExample");
+            Job job = Job.getInstance(cconf, "LineCountExample");
             job.setJarByClass(LineCountExample.class);
 
             job.setMapperClass(LineCountExample.Map.class);
@@ -65,12 +65,12 @@ public class LineCountExample {
         public void map(Object key, Text value, Context context)
                 throws IOException, InterruptedException {
             String line = value.toString();
-            StringTokenizer itr = new StringTokenizer(line, " ");
+            //StringTokenizer itr = new StringTokenizer(line, " ");
 
-            while (itr.hasMoreTokens()) {
-                word.set(itr.nextToken());
+            //while (itr.hasMoreTokens()) {
+                word.set("");
                 context.write(word, one);
-            }
+            //}
         }
     }//Mapper Class
 
