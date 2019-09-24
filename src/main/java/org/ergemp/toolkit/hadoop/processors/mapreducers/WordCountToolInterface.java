@@ -23,11 +23,12 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class WordCountToolInterface extends Configured implements Tool {
-//hadoop jar hadoop_toolkit.jar hadoop_toolkit.wordCount_toolInterface -D fs.defaultFS=hdfs://localhost  /input/path /output/path
+    //hadoop jar hadoop_toolkit.jar org.ergemp.toolkit.hadoop.processors.mapreducers.WordCountToolInterface -D fs.defaultFS=hdfs://localhost:8020  /input/path /output/path
+
     //-D fs.defaultFS=hdfs://localhost:8020 /customers.csv /out.txt
     //-D fs.defaultFS=hdfs://localhost:8020 -D yarn.resourcemanager.address=localhost:8032 /customers.csv /out.txt
     //-fs hdfs://127.0.0.1:8020 -jt 127.0.0.1:8032 /customers.csv /out6.txt
-    //
+
     //-fs hdfs://localhost
     //-jt localhost:8032
     //-libjars  -> specify comma separated jar files to include in the classpath.
@@ -35,7 +36,7 @@ public class WordCountToolInterface extends Configured implements Tool {
     //-files    -> specify comma separated files to be copied to the map reduce cluster
     //-archives -> specify comma separated archives to be unarchived on the compute machines.
 
-    //java -cp hadoop_toolkit.jar hadoop_toolkit.wordCount_toolInterface -fs hdfs://localhost:8020 -jt localhost:8032 -D mapreduce.framework.name=yarn /customers.csv /out6.txt
+    //java -cp hadoop_toolkit.jar org.ergemp.toolkit.hadoop.processors.mapreducers.WordCountToolInterface -fs hdfs://localhost:8020 -jt localhost:8032 -D mapreduce.framework.name=yarn /customers.csv /out6.txt
 
     /*
     conf.set("my.dummy.configuration","foobar");

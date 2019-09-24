@@ -316,37 +316,28 @@ public class FileMerger {
                 }
             }
         }
-        catch(Exception ex)
-        {
-            if (ex.getMessage().contains("Failed to close inode"))
-            {
+        catch(Exception ex) {
+            if (ex.getMessage().contains("Failed to close inode")) {
                 //we are deleting files we have created
                 //when fs is closing, fs is trying to close the lease on created files
                 //which is causing this exception
             }
-            else
-            {
+            else {
                 System.out.println(ex.getMessage());
             }
         }
-        finally
-        {
+        finally {
 
         }
-
         disconnectHadoop();
     }
 
 
-    public static void compress (String gPath)
-    {
-        try
-        {
+    public static void compress (String gPath) {
+        try {
             org.apache.hadoop.fs.Path inPath = new org.apache.hadoop.fs.Path(gPath);
-            if (fs.exists(inPath))
-            {
-                if (fs.isFile(inPath))
-                {
+            if (fs.exists(inPath)) {
+                if (fs.isFile(inPath)) {
                     Class<?> codecClass = Class.forName("org.apache.hadoop.io.compress.GzipCodec");
                     Configuration conf = new Configuration();
                     CompressionCodec codec = (CompressionCodec) ReflectionUtils.newInstance(codecClass, conf);
@@ -359,43 +350,35 @@ public class FileMerger {
                 }
             }
         }
-        catch(Exception ex)
-        {
+        catch(Exception ex) {
             ex.printStackTrace();
         }
-        finally
-        {
+        finally {
         }
     }
 
-    public static Boolean isOpenForWrite(String gFile)
-    {
+    public static Boolean isOpenForWrite(String gFile) {
         Boolean retVal = true;
 
-        try
-        {
+        try {
             DistributedFileSystem dfs = new DistributedFileSystem();
             Path path = new Path(gFile);
             FileSystem fs = path.getFileSystem(conf);
             dfs.initialize(fs.getUri(),conf);
 
-            if (dfs.exists(path) && !dfs.isFileClosed(path) && dfs.isFile(path))
-            {
+            if (dfs.exists(path) && !dfs.isFileClosed(path) && dfs.isFile(path)) {
                 System.out.println("File " + path + " already opened in write mode");
                 retVal = true;
             }
-            else
-            {
+            else {
                 System.out.println("File " + path + " closed");
                 retVal = false;
             }
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             e.printStackTrace();
         }
-        finally
-        {
+        finally {
             return retVal;
         }
     }
@@ -439,7 +422,6 @@ public class FileMerger {
         try
         {
 
-
         }
         catch(Exception ex)
         {
@@ -450,56 +432,47 @@ public class FileMerger {
         }
     }
 
-    public static void connectHadoop()
-    {
-        try
-        {
+    public static void connectHadoop() {
+        try {
             conf.set("fs.defaultFS", hdfsConnect );
             conf.set("mapreduce.framework.name", "local");
             conf.set("dfs.replication","1");
 
+            //20190924: due to java.io.IOException: No FileSystem for scheme: hdfs
+            conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+            conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+
             fs = org.apache.hadoop.fs.FileSystem.get(conf);
         }
-        catch(Exception ex)
-        {
+        catch(Exception ex) {
             ex.printStackTrace();
         }
-        finally
-        {
+        finally {
 
         }
     }
 
     public static void disconnectHadoop()
     {
-        try
-        {
+        try {
             fs.close();
-
         }
-        catch(org.apache.hadoop.hdfs.server.namenode.LeaseExpiredException leaseEx)
-        {
-
+        catch(org.apache.hadoop.hdfs.server.namenode.LeaseExpiredException leaseEx) {
+            System.out.println(leaseEx.getMessage());
         }
-        catch(org.apache.hadoop.ipc.RemoteException remoteEx)
-        {
-            if (remoteEx.getMessage().toLowerCase().contains("Failed to close inode"))
-            {
+        catch(org.apache.hadoop.ipc.RemoteException remoteEx) {
+            if (remoteEx.getMessage().toLowerCase().contains("Failed to close inode")) {
                 //do nothing
                 //this exception is expected due to the file deletion after compression
             }
-            else
-            {
+            else {
                 System.out.println(remoteEx.getMessage());
             }
-
         }
-        catch(Exception ex)
-        {
+        catch(Exception ex) {
             System.out.println(ex.getMessage());
         }
-        finally
-        {
+        finally {
 
         }
     }

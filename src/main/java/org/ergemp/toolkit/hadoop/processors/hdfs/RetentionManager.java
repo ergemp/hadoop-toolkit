@@ -25,7 +25,7 @@ public class RetentionManager {
 
     private static List<String> fileList = new ArrayList();
 
-    private static org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
+    private static org.apache.hadoop.conf.Configuration hadoopConf = new org.apache.hadoop.conf.Configuration();
     private static org.apache.hadoop.fs.FileSystem fs;
 
     public static void main(String[] args)
@@ -119,7 +119,7 @@ public class RetentionManager {
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -166,7 +166,7 @@ public class RetentionManager {
         }
         catch(Exception ex)
         {
-
+            System.out.println(ex.getMessage());
         }
         finally
         {
@@ -174,81 +174,67 @@ public class RetentionManager {
         }
     }
 
-    public static Boolean checkRetention(Long lastModified)
-    {
+    public static Boolean checkRetention(Long lastModified) {
         Boolean retVal = true;
         Long currTime = new Date().getTime() / 1000 ;
         Long retentionEpoch = Long.parseLong("0");
 
-        try
-        {
-            if (retentionMetric.trim().equalsIgnoreCase("MINUTE"))
-            {
+        try {
+            if (retentionMetric.trim().equalsIgnoreCase("MINUTE")) {
                 retentionEpoch = Long.parseLong(retentionVal) * 60  ;
             }
-            else if (retentionMetric.trim().equalsIgnoreCase("HOUR"))
-            {
+            else if (retentionMetric.trim().equalsIgnoreCase("HOUR")) {
                 retentionEpoch = Long.parseLong(retentionVal) * 60 * 60 ;
             }
-            else if (retentionMetric.trim().equalsIgnoreCase("DAY"))
-            {
+            else if (retentionMetric.trim().equalsIgnoreCase("DAY")) {
                 retentionEpoch = Long.parseLong(retentionVal) * 60 * 60 * 24  ;
             }
 
             currTime = currTime - retentionEpoch;
 
-
-            if (lastModified / 1000 < currTime)
-            {
+            if (lastModified / 1000 < currTime) {
                 retVal = true;
             }
-            else
-            {
+            else {
                 retVal = false;
             }
         }
-        catch(Exception ex)
-        {
+        catch(Exception ex) {
+            System.out.println(ex.getMessage());
         }
-        finally
-        {
+        finally {
             return retVal;
         }
     }
 
 
-    public static void connectHadoop()
-    {
-        try
-        {
-            conf.set("fs.defaultFS", hdfsConnect );
-            conf.set("mapreduce.framework.name", "local");
+    public static void connectHadoop() {
+        try {
+            hadoopConf.set("fs.defaultFS", hdfsConnect );
+            hadoopConf.set("mapreduce.framework.name", "local");
 
-            fs = org.apache.hadoop.fs.FileSystem.get(conf);
+            //20190924: due to java.io.IOException: No FileSystem for scheme: hdfs
+            hadoopConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+            hadoopConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+
+            fs = org.apache.hadoop.fs.FileSystem.get(hadoopConf);
         }
-        catch(Exception ex)
-        {
+        catch(Exception ex) {
             ex.printStackTrace();
         }
-        finally
-        {
+        finally {
 
         }
     }
 
-    public static void disconnectHadoop()
-    {
-        try
-        {
+    public static void disconnectHadoop() {
+        try {
             fs.close();
-
         }
-        catch(Exception ex)
-        {
+        catch(Exception ex) {
             //ex.printStackTrace();
         }
-        finally
-        {
+        finally {
 
         }
     }

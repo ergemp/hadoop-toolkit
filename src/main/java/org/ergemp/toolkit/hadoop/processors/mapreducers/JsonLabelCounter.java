@@ -36,7 +36,7 @@ public class JsonLabelCounter extends Configured implements Tool  {
     public int run(String[] args) throws Exception
     {
         /*
-        java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter -fs "hdfs://localhost:8020/" -jt "localhost:8032" "/mockdata/clickStream.json" "/outdata/labelCounter" "event" "null"
+        java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.mapreducers.JsonLabelCounter -fs "hdfs://localhost:8020/" -jt "localhost:8032" "/mockdata/clickStream.json" "/outdata/labelCounter" "event" "null"
         */
 
         if (!(args.length == 4 || args.length == 3))
@@ -48,6 +48,12 @@ public class JsonLabelCounter extends Configured implements Tool  {
         }
 
         Configuration conf = this.getConf();
+
+        //20190924: due to java.io.IOException: No FileSystem for scheme: hdfs
+        conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+        conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+        conf.set("mapreduce.framework.name", "yarn");
+
         conf.set("jsonKey", args[2]);
         if (args.length == 4)
         {
