@@ -32,15 +32,15 @@ hadoop_toolkit.hdfs_retention_mgr package uses the following input parameters
 ```
 # Example 1 - Listing files older than 10 Hours
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.hdfs_retention_mgr \
--hdfsConnect "hdfs://127.0.0.1:9000" \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.hdfs.RetentionManager \
+-hdfsConnect "hdfs://heCluster01:8020" \
 -hdfsPath "/stardust/postgres_test_streaming_logs/testdb01" \
 -retentionVal 10 \
 -retentionMetric HOUR
 ```
 # Example 2 - Deleting files older than 10 Days
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.hdfs_retention_mgr \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.hdfs.RetentionManager \
 -hdfsConnect "hdfs://127.0.0.1:9000" \
 -hdfsPath "/stardust/postgres_test_streaming_logs/testdb01" \
 -retentionVal 10 \
