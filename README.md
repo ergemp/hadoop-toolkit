@@ -74,7 +74,7 @@ hadoop_toolkit.hdfs_file_merger package uses the following input parameters
 ```
 # Example 3 - Merging Files which are smaller than 100M in size
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.hdfs_file_merger \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.hdfs.FileMerger \
 -hdfsConnect "hdfs://127.0.0.1:8020" \
 -hdfsPath "/stardust/postgres_test_streaming_logs/testdb01" \
 -sizeLimit 100
