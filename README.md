@@ -124,3 +124,17 @@ java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
 "event" \
 '.*'  
 ```
+  
+# Note
+
+If you are using High Available Namenodes then you need to include core-site.xml and hdfs-site.xml configurations to your classpath in order to resolve the clustername.
+
+```
+java -cp "hadoop_toolkit-201909-jar-with-dependencies.jar:$HADOOP_HOME/etc/hadoop" org.ergemp.toolkit.hadoop.processors.hdfs.RetentionManager \
+-hdfsConnect "hdfs://heCluster01:8020" \
+-hdfsPath "/kafka/realty-changed/partdate=2019092300" \
+-retentionVal 10 \
+-retentionMetric HOUR
+```
+
+
