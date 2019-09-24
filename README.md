@@ -32,15 +32,15 @@ hadoop_toolkit.hdfs_retention_mgr package uses the following input parameters
 ```
 # Example 1 - Listing files older than 10 Hours
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.hdfs_retention_mgr \
--hdfsConnect "hdfs://127.0.0.1:9000" \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.hdfs.RetentionManager \
+-hdfsConnect "hdfs://heCluster01:8020" \
 -hdfsPath "/stardust/postgres_test_streaming_logs/testdb01" \
 -retentionVal 10 \
 -retentionMetric HOUR
 ```
 # Example 2 - Deleting files older than 10 Days
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.hdfs_retention_mgr \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.hdfs.RetentionManager \
 -hdfsConnect "hdfs://127.0.0.1:9000" \
 -hdfsPath "/stardust/postgres_test_streaming_logs/testdb01" \
 -retentionVal 10 \
@@ -74,7 +74,7 @@ hadoop_toolkit.hdfs_file_merger package uses the following input parameters
 ```
 # Example 3 - Merging Files which are smaller than 100M in size
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.hdfs_file_merger \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.hdfs.FileMerger \
 -hdfsConnect "hdfs://127.0.0.1:8020" \
 -hdfsPath "/stardust/postgres_test_streaming_logs/testdb01" \
 -sizeLimit 100
@@ -124,3 +124,17 @@ java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
 "event" \
 '.*'  
 ```
+  
+# Note
+
+If you are using High Available Namenodes then you need to include core-site.xml and hdfs-site.xml configurations to your classpath in order to resolve the clustername.
+
+```
+java -cp "hadoop_toolkit-201909-jar-with-dependencies.jar:$HADOOP_HOME/etc/hadoop" org.ergemp.toolkit.hadoop.processors.hdfs.RetentionManager \
+-hdfsConnect "hdfs://heCluster01:8020" \
+-hdfsPath "/kafka/realty-changed/partdate=2019092300" \
+-retentionVal 10 \
+-retentionMetric HOUR
+```
+
+
