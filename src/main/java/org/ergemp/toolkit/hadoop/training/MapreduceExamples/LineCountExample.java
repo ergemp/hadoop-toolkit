@@ -25,6 +25,10 @@ public class LineCountExample {
             //conf.set("mapreduce.job.running.map.limit", "3");
             //conf.set("mapreduce.job.maps", "3");
 
+            //20190924: due to java.io.IOException: No FileSystem for scheme: hdfs
+            cconf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+            cconf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+
             // Create job
             Job job = Job.getInstance(cconf, "LineCountExample");
             job.setJarByClass(LineCountExample.class);

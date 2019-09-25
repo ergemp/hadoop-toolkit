@@ -20,11 +20,15 @@ public class WordCountExample {
     public static void main(String[] args) {
         try {
             Configuration cconf = new Configuration();
-            cconf.set("fs.defaultFS", "hdfs://localhost:8020");
+            cconf.set("fs.defaultFS", "hdfs://127.0.0.1:8020");
             cconf.set("mapreduce.framework.name", "yarn");
-            cconf.set("yarn.resourcemanager.address", "localhost:8032");
+            cconf.set("yarn.resourcemanager.address", "127.0.0.1:8032");
             //conf.set("mapreduce.job.running.map.limit", "3");
             //conf.set("mapreduce.job.maps", "3");
+
+            //20190924: due to java.io.IOException: No FileSystem for scheme: hdfs
+            cconf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+            cconf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
 
             // Create job
             Job job = Job.getInstance(cconf, "WordCountExample");
@@ -44,7 +48,7 @@ public class WordCountExample {
             job.setInputFormatClass(TextInputFormat.class);
 
             // Output
-            FileOutputFormat.setOutputPath(job, new Path("/output/wordcount_example"));
+            FileOutputFormat.setOutputPath(job, new Path("/outdata/wordcount_example"));
             job.setOutputFormatClass(TextOutputFormat.class);
 
             // Execute job and return status
