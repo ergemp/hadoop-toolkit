@@ -87,7 +87,7 @@ USAGE:
   Usage: %s [generic options] <input> <output> <jsonKey> <jsonFilter(optional)>
 # Example 4 - Counting the values of "pid" key
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.mapreducers.JsonLabelCounter \
 -fs "hdfs://localhost:8020/" \
 -jt "localhost:8032" \
 "/mockdata/clickStream.json" \
@@ -96,7 +96,7 @@ java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
 ```
 # Example 5 - Counting the values of "event" key after filtering the not null userIds
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.mapreducers.JsonLabelCounter \
   -fs "hdfs://localhost:8020/" \
   -jt "localhost:8032" \
   "/mockdata/clickStream.json"  \
@@ -106,7 +106,7 @@ java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
 ```
 # Example 6 - Counting the values of "event" key after filtering the null userIds  
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.mapreducers.JsonLabelCounter \
 -fs "hdfs://localhost:8020/" \
 -jt "localhost:8032" \
 "/mockdata/clickStream.json"  \
@@ -116,7 +116,7 @@ java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
 ```
 # Example 7 - Counting the values of "event" by filtering nothing
 ```
-java -cp dist/hadoop_toolkit.jar hadoop_toolkit.json_labelCounter \
+java -cp hadoop_toolkit-201909-jar-with-dependencies.jar org.ergemp.toolkit.hadoop.processors.mapreducers.JsonLabelCounter \
 -fs "hdfs://localhost:8020/" \
 -jt "localhost:8032" \
 "/mockdata/clickStream.json" \
