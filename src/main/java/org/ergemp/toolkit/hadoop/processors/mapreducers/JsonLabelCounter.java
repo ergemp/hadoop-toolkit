@@ -52,7 +52,6 @@ public class JsonLabelCounter extends Configured implements Tool  {
         //20190924: due to java.io.IOException: No FileSystem for scheme: hdfs
         conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
         conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
-        conf.set("mapreduce.framework.name", "yarn");
 
         conf.set("jsonKey", args[2]);
         if (args.length == 4)
