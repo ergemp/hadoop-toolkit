@@ -1,4 +1,4 @@
-# hadoop_toolkit
+# hadoop-toolkit
 
 Hadoop Toolkit supports three features for the time being. 
 
